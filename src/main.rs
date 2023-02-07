@@ -1,5 +1,5 @@
 use rand::{thread_rng, Rng};
-// use std::io::{self, BufRead};
+use std::io::{self, BufRead};
 
 const WORDS: [&str; 3] = ["hi", "hello", "nuts"];
 
@@ -11,5 +11,9 @@ fn get_word() -> String {
 
 fn main() {
     let w = get_word();
-    println!("word is {}", w);
+
+    let stdin = io::stdin();
+    for line in stdin.lock().lines() {
+        println!("Hello, {}!", line.unwrap());
+    }
 }
