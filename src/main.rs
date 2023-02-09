@@ -11,12 +11,9 @@ fn get_word() -> String {
     WORDS[n].to_string()
 }
 
-fn main() {
-    let word = get_word();
-    let mut chars_left = word.len();
+fn build_map(word: &String) -> HashMap<char, i32> {
     let mut word_map = HashMap::new();
 
-    // build map {char: count}
     for c in word.chars() {
         if word_map.contains_key(&c) {
             if let Some(x) = word_map.get_mut(&c) {
@@ -26,11 +23,19 @@ fn main() {
             word_map.insert(c, 1);
         }
     }
+    word_map
+}
+
+fn main() {
+    let word = get_word();
+    let mut chars_left = word.len();
+    let mut word_map = build_map(&word);
+
     // dbg!(&word_map);
 
     let mut turns = 0;
 
-    while turns < 5 {
+    while turns < 5 || chars_left > 0 {
         // get users guess
         let mut guess = String::new();
         io::stdin().read_line(&mut guess).expect("Failed to read");
@@ -44,7 +49,7 @@ fn main() {
                 }
             }
         }
-        // dbg!(&word_map);
+        dbg!(&word_map);
 
         turns += 1;
 
