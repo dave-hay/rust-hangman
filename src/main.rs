@@ -37,9 +37,10 @@ fn main() {
     let mut board = vec!['_'; word.len()];
     // dbg!(&dict);
 
-    let mut turns = 0;
+    let mut turns = 5;
 
-    while turns < 5 && chars_left > 0 {
+    while turns > 0 && chars_left > 0 {
+        println!("Guess a letter!\nYou have {} guesses left.", turns);
         // get users guess
         let mut guess = String::new();
         io::stdin().read_line(&mut guess).expect("Failed to read");
@@ -59,7 +60,7 @@ fn main() {
                 }
             }
         }
-        turns += 1;
+        turns -= 1;
         // dbg!(&word_map);
 
         let s: String = board.iter().collect();
