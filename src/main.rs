@@ -11,27 +11,30 @@ fn get_word() -> String {
     WORDS[n].to_string()
 }
 
-fn build_map(word: &String) -> HashMap<char, i32> {
-    let mut word_map = HashMap::new();
+fn build_dict(word: &String) -> HashMap<char, Vec<usize>> {
+    let mut dict: HashMap<char, Vec<usize>> = HashMap::new();
 
-    for c in word.chars() {
-        if word_map.contains_key(&c) {
-            if let Some(x) = word_map.get_mut(&c) {
-                *x += &1
+    for (i, c) in word.chars().enumerate() {
+        // push
+        if dict.contains_key(&c) {
+            if let Some(x) = dict.get_mut(&c) {
+                x.push(i);
             }
         } else {
-            word_map.insert(c, 1);
+            // create new vec with ch
+            let v = vec![i];
+            dict.insert(c, v);
         }
     }
-    word_map
+    dict
 }
 
 fn main() {
     let word = get_word();
     let mut chars_left = word.len();
-    let mut word_map = build_map(&word);
-
-    // dbg!(&word_map);
+    let mut dict = build_dict(&word);
+    let mut board = vec!['_'; word.len()];
+    // dbg!(&dict);
 
     let mut turns = 0;
 
@@ -41,18 +44,24 @@ fn main() {
         io::stdin().read_line(&mut guess).expect("Failed to read");
         let guess = guess.trim().to_owned();
 
+        // if guess is correct remove from dict
+
+        // go over guess if match
+        // remove from dict and update board values with guess letter
         for c in guess.chars() {
-            if word_map.contains_key(&c) {
-                if let Some(x) = word_map.get_mut(&c) {
-                    *x -= &1;
-                    chars_left -= 1;
+            if dict.contains_key(&c) {
+                if let Some((k, v)) = dict.remove_entry(&c) {
+                    for i in v {
+                        board[i] = k;
+                    }
                 }
             }
         }
-        dbg!(&word_map);
-
         turns += 1;
+        // dbg!(&word_map);
 
+        let s: String = board.iter().collect();
+        println!("{}", s);
         // build correctly guessed map
 
         // find where there is a match
