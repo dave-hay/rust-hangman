@@ -46,6 +46,11 @@ fn main() {
         io::stdin().read_line(&mut guess).expect("Failed to read");
         let guess = guess.trim().to_owned();
 
+        if guess.len() != 1 {
+            println!("You need to guess only one letter!");
+            continue;
+        }
+
         // if guess is correct remove from dict
 
         // go over guess if match
