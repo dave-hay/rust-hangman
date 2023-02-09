@@ -2,7 +2,8 @@ use rand::{thread_rng, Rng};
 use std::collections::HashMap;
 use std::io;
 
-const WORDS: [&str; 3] = ["hi", "hello", "nuts"];
+// https://stackoverflow.com/questions/27459640/how-to-create-a-static-array-of-strings/32383866#32383866
+const WORDS: &'static [&'static str] = &["hi", "hello", "nuts"];
 
 // choose random word
 fn get_word() -> String {
@@ -38,7 +39,7 @@ fn main() {
 
     let mut turns = 0;
 
-    while turns < 5 || chars_left > 0 {
+    while turns < 5 && chars_left > 0 {
         // get users guess
         let mut guess = String::new();
         io::stdin().read_line(&mut guess).expect("Failed to read");
@@ -51,6 +52,7 @@ fn main() {
         for c in guess.chars() {
             if dict.contains_key(&c) {
                 if let Some((k, v)) = dict.remove_entry(&c) {
+                    chars_left -= v.len();
                     for i in v {
                         board[i] = k;
                     }
