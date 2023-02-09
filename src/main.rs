@@ -1,5 +1,6 @@
 use rand::{thread_rng, Rng};
-use std::io::{self, BufRead};
+use std::collections::HashMap;
+use std::io;
 
 const WORDS: [&str; 3] = ["hi", "hello", "nuts"];
 
@@ -10,10 +11,39 @@ fn get_word() -> String {
 }
 
 fn main() {
-    let w = get_word();
+    let word = get_word();
+    let mut word_map = HashMap::new();
 
-    let stdin = io::stdin();
-    for line in stdin.lock().lines() {
-        println!("Hello, {}!", line.unwrap());
+    // build map
+    for c in word.chars() {
+        if word_map.contains_key(&c) {
+            if let Some(x) = word_map.get_mut(&c) {
+                *x += &1
+            }
+        } else {
+            word_map.insert(c, 1);
+        }
+    }
+
+    for (key, val) in word_map.iter() {
+        println!("key: {key} val: {val}");
+    }
+
+    let mut count = 0;
+
+    while count < 5 {
+        // get users guess
+        let mut guess = String::new();
+        io::stdin().read_line(&mut guess).expect("Failed to read");
+        let guess = guess.trim().to_owned();
+        count += 1;
+
+        // find where there is a match
+        // update board
+        // if all correct return
+
+        for c in word.chars() {
+            println!("{c}");
+        }
     }
 }
