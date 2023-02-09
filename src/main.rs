@@ -4,6 +4,7 @@ use std::io;
 
 const WORDS: [&str; 3] = ["hi", "hello", "nuts"];
 
+// choose random word
 fn get_word() -> String {
     let mut rng = thread_rng();
     let n = rng.gen_range(0..WORDS.len());
@@ -12,9 +13,10 @@ fn get_word() -> String {
 
 fn main() {
     let word = get_word();
+    let mut chars_left = word.len();
     let mut word_map = HashMap::new();
 
-    // build map
+    // build map {char: count}
     for c in word.chars() {
         if word_map.contains_key(&c) {
             if let Some(x) = word_map.get_mut(&c) {
@@ -24,19 +26,29 @@ fn main() {
             word_map.insert(c, 1);
         }
     }
+    // dbg!(&word_map);
 
-    for (key, val) in word_map.iter() {
-        println!("key: {key} val: {val}");
-    }
+    let mut turns = 0;
 
-    let mut count = 0;
-
-    while count < 5 {
+    while turns < 5 {
         // get users guess
         let mut guess = String::new();
         io::stdin().read_line(&mut guess).expect("Failed to read");
         let guess = guess.trim().to_owned();
-        count += 1;
+
+        for c in guess.chars() {
+            if word_map.contains_key(&c) {
+                if let Some(x) = word_map.get_mut(&c) {
+                    *x -= &1;
+                    chars_left -= 1;
+                }
+            }
+        }
+        // dbg!(&word_map);
+
+        turns += 1;
+
+        // build correctly guessed map
 
         // find where there is a match
         // update board
