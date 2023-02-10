@@ -37,8 +37,14 @@ fn main() {
     let mut turns = 5;
     let mut board = vec!['_'; word.len()];
 
+    println!("Guess a letter!   You have {} guesses", turns);
     while turns > 0 && chars_left > 0 {
-        println!("Guess a letter!\nYou have {} guesses left.", turns);
+        if turns != 5 {
+            println!("{} guesses left.", turns);
+        }
+        // print updated board
+        let s: String = board.iter().collect();
+        println!("{}\n", s);
         // get users guess
         let mut guess = String::new();
         io::stdin().read_line(&mut guess).expect("Failed to read");
@@ -62,10 +68,8 @@ fn main() {
                 turns -= 1;
             }
         }
-
-        // print updated board
-        let s: String = board.iter().collect();
-        println!("{}", s);
+        // https://stackoverflow.com/questions/34837011/how-to-clear-the-terminal-screen-in-rust-after-a-new-line-is-printed#:~:text=status().-,unwrap()%3B,%22clear%22%20command%20to%20terminal.
+        print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
     }
 
     if chars_left == 0 {
