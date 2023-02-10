@@ -39,6 +39,15 @@ fn build_dict(word: &String) -> HashMap<char, Vec<usize>> {
     dict
 }
 
+fn been_guessed(c: &char, guessed: &Vec<char>) -> bool {
+    for g in guessed {
+        if g == c {
+            return true;
+        }
+    }
+    false
+}
+
 fn print_vec(v: &Vec<char>) {
     for c in v {
         print!("{} ", c);
@@ -69,7 +78,15 @@ fn main() {
         let guess = guess.trim().to_owned();
 
         if guess.len() != 1 {
+            print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
             println!("You need to guess only one letter!");
+            continue;
+        }
+        let g: char = guess.chars().nth(0).unwrap();
+
+        if been_guessed(&g, &guessed) {
+            print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
+            println!("Already guessed that!");
             continue;
         }
 
