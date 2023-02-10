@@ -34,10 +34,8 @@ fn main() {
     let word = get_word();
     let mut chars_left = word.len();
     let mut dict = build_dict(&word);
-    let mut board = vec!['_'; word.len()];
-    // dbg!(&dict);
-
     let mut turns = 5;
+    let mut board = vec!['_'; word.len()];
 
     while turns > 0 && chars_left > 0 {
         println!("Guess a letter!\nYou have {} guesses left.", turns);
@@ -51,9 +49,6 @@ fn main() {
             continue;
         }
 
-        // if guess is correct remove from dict
-
-        // go over guess if match
         // remove from dict and update board values with guess letter
         for c in guess.chars() {
             if dict.contains_key(&c) {
@@ -63,21 +58,19 @@ fn main() {
                         board[i] = k;
                     }
                 }
+            } else {
+                turns -= 1;
             }
         }
-        turns -= 1;
-        // dbg!(&word_map);
 
+        // print updated board
         let s: String = board.iter().collect();
         println!("{}", s);
-        // build correctly guessed map
+    }
 
-        // find where there is a match
-        // update board
-        // if all correct return
-
-        for c in word.chars() {
-            println!("{c}");
-        }
+    if chars_left == 0 {
+        println!("WINNEEERRRRR!!!!!!!!!!!!!");
+    } else {
+        println!("😭😭😭😭😭😭😭😭😭😭😭😭😭");
     }
 }
