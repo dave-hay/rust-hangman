@@ -39,21 +39,30 @@ fn build_dict(word: &String) -> HashMap<char, Vec<usize>> {
     dict
 }
 
+fn print_vec(v: &Vec<char>) {
+    for c in v {
+        print!("{} ", c);
+    }
+    print!("\n");
+}
+
 fn main() {
     let word = get_word();
     let mut chars_left = word.len();
     let mut dict = build_dict(&word);
-    let mut turns = 5;
+    let mut turns = 6;
     let mut board = vec!['_'; word.len()];
+    let mut guessed: Vec<char> = Vec::new();
 
     println!("Guess a letter!   You have {} guesses", turns);
     while turns > 0 && chars_left > 0 {
-        if turns != 5 {
+        if turns != 6 {
             println!("{} guesses left.", turns);
         }
-        // print updated board
-        let s: String = board.iter().collect();
-        println!("{}\n", s);
+
+        print_vec(&guessed);
+        print_vec(&board);
+
         // get users guess
         let mut guess = String::new();
         io::stdin().read_line(&mut guess).expect("Failed to read");
@@ -76,6 +85,7 @@ fn main() {
             } else {
                 turns -= 1;
             }
+            guessed.push(c);
         }
         // https://stackoverflow.com/questions/34837011/how-to-clear-the-terminal-screen-in-rust-after-a-new-line-is-printed#:~:text=status().-,unwrap()%3B,%22clear%22%20command%20to%20terminal.
         print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
