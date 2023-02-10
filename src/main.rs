@@ -2,14 +2,23 @@ use rand::{thread_rng, Rng};
 use std::collections::HashMap;
 use std::io;
 
-// https://stackoverflow.com/questions/27459640/how-to-create-a-static-array-of-strings/32383866#32383866
-const WORDS: &'static [&'static str] = &["hi", "hello", "nuts"];
+const WORDS: &str = include_str!("words.txt");
 
 // choose random word
 fn get_word() -> String {
+    let w: String = WORDS.to_string();
+    let mut words = Vec::new();
+    let mut l: usize = 0;
+
+    for (r, ch) in w.chars().enumerate() {
+        if ch == '\n' {
+            words.push(&w[l..r]);
+            l = r + 1;
+        }
+    }
     let mut rng = thread_rng();
-    let n = rng.gen_range(0..WORDS.len());
-    WORDS[n].to_string()
+    let n: usize = rng.gen_range(0..words.len());
+    words[n].to_string()
 }
 
 fn build_dict(word: &String) -> HashMap<char, Vec<usize>> {
@@ -76,5 +85,6 @@ fn main() {
         println!("WINNEEERRRRR!!!!!!!!!!!!!");
     } else {
         println!("😭😭😭😭😭😭😭😭😭😭😭😭😭");
+        println!("The word was ~{}~", word);
     }
 }
